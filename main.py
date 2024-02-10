@@ -108,7 +108,7 @@ with sqlite3.connect("server.db") as connection:
 
 
     @client.slash_command(description="Ваш профиль.")
-    async def профиль(ctx):
+    async def prof(ctx):
         embe = disnake.Embed(
             title=f":coin: Баланс {ctx.author.name}",
             description="",
@@ -156,7 +156,7 @@ with sqlite3.connect("server.db") as connection:
 
 
     @client.slash_command(description="Магазин сервера.")
-    async def магазин(ctx):
+    async def shop(ctx):
         embed = disnake.Embed(title='Магазин Сервера', colour=disnake.Color(0x87CEEB))
         num = 0
         embed.add_field(name=":cyclone: Роли", value="")
@@ -193,7 +193,7 @@ with sqlite3.connect("server.db") as connection:
 
 
     @client.slash_command(description="Купить дом или бизнес.")
-    async def купить(ctx, бизнес: str = None, дом: str = None):
+    async def buy(ctx, бизнес: str = None, дом: str = None):
         embe = disnake.Embed(description=f"**{ctx.author.name}** У вас недостаточно денег!")
         if дом == None and дом == None:
             await ctx.send("Вы не указали название покупаемого дома или бизнеса!")
@@ -244,7 +244,7 @@ with sqlite3.connect("server.db") as connection:
 
 
     @client.slash_command(description="Продать дом или бизнес.")
-    async def продать(ctx, *,бизнес: str = None, дом: str = None):
+    async def sold(ctx, *,бизнес: str = None, дом: str = None):
         if бизнес is None is дом is None:
             await ctx.send("Вы не выбрали что именно вы хотите продать (дом/бизнес)")
         elif cursor.execute("SELECT users FROM business WHERE id = {}".format(ctx.author.id)).fetchone()[
@@ -254,7 +254,7 @@ with sqlite3.connect("server.db") as connection:
 
 
     @client.slash_command(description="Купить роль из магазина сервера.")
-    async def купить_роль(ctx, роль: disnake.Role):
+    async def buy_role(ctx, роль: disnake.Role):
         if роль is None:
             await ctx.send(f"**{ctx.author}**, укажите роль которую вы желаете приобрести.")
         else:
@@ -274,7 +274,7 @@ with sqlite3.connect("server.db") as connection:
 
     @client.slash_command(name="работать",description="Работать.")
     @commands.cooldown(1, 60, commands.BucketType.user)
-    async def работать(ctx):
+    async def work(ctx):
         amount = random.randint(100, 500)
         situation = random.choice(situation_work)
         cursor.execute("UPDATE users SET cash = cash + {} WHERE id = {}".format(int(amount), ctx.author.id))
@@ -322,7 +322,7 @@ with sqlite3.connect("server.db") as connection:
 
 
     @client.slash_command(description="Орел и Решка")
-    async def монетка(ctx, orel: str, coin: int):
+    async def monetka(ctx, orel: str, coin: int):
         gg = random.randint(0, 100)
         monet = ""
         print(gg)
@@ -365,19 +365,17 @@ with sqlite3.connect("server.db") as connection:
 
 
     @client.slash_command(description="Ограбить друга.")
-    async def ненадодядя(ctx, member: disnake.Member):
-        mon1 = cursor.execute("SELECT cash FROM users WHERE id = {}".format(member.id)).fetchone()[0]
-        mon2 = cursor.execute("SELECT cash FROM users WHERE id = {}".format(ctx.author.id)).fetchone()[0]
-        print(mon2 + mon1)
-        money = random.randint(mon2, mon1)
-        #print(money)
+    async def rob(ctx, member: disnake.Member):
         if member is None:
             await ctx.send("Вы не указали пользователя которого хотите **ограбить!**")
         elif cursor.execute("SELECT cash FROM users WHERE id = {}".format(member.id)).fetchone()[0] < 50:
             await ctx.send("Для ограбления данного пользователя у него должно быть хотя бы 50 :leaves: ")
         else:
-            await ctx.send(f"Вы успешно ограбили **{member.name}** | +{money}")
-        print(mon1, mon2)
+            print("Вс")
+            money = cursor.execute("SELECT cash FR0M users WHERE id = {}".format(member.id))
+            cursor.execute("UPDATE users SET cash = cash - {} WHERE id = {}".format(money, member.id))
+
+            await ctx.send(f"Вы успешно ограбили **{member.name}** | + 11")
 
 
     @client.slash_command(description="Лучшие по кол-ву листочков.")
@@ -415,39 +413,6 @@ with sqlite3.connect("server.db") as connection:
     async def банк(ctx):
         await ctx.send(f"""`{cursor.execute("SELECT bank FROM users WHERE id = {}".format(ctx.author.id)).fetchone()[0]}`""")
 
-
-    # @commands.slash_command()
-    # @commands.has_permissions(administrator=True)
-    # async def take(ctx, member: disnake.Member, amount):
-    #     channel = client.get_channel(1156681611904036970)
-    #     if member is None:
-    #         await channel.send(
-    #             f"<@{ctx.author.id}> вы не указали пользователя у которого хотите забрать *листочки* ")
-    #     elif amount is None:
-    #         await channel.send(f"<@{ctx.author.id}> вы не указали кол-во забираемых листочков! ")
-    #     elif amount == "all":
-    #         cash = cursor.execute(f"SELECT cash FROM users WHERE id = {member.id}").fetchone()[0]
-    #         cursor.execute("UPDATE users SET cash = cash - {} WHERE id = {}".format(cash, member.id))
-    #         await channel.send("Успешно!")
-    #     elif int(amount) < 1:
-    #         await ctx.send(f"**{ctx.author.name}** укажите сумму больше **0** ")
-    #     else:
-    #         cursor.execute("UPDATE users SET cash = cash - {} WHERE id = {}".format(int(amount), member.id))
-    #
-    # @commands.slash_command()
-    # @commands.has_permissions(administrator=True)
-    # async def award(ctx, member: disnake.Member, amount):
-    #     channel1 = client.get_channel(1156681611904036970)
-    #     if member is None:
-    #         await channel1.send(
-    #             f"<@{ctx.author.id}> вы не указали пользователя которому хотите выдать *листочки* :leaves:")
-    #     elif amount is None:
-    #         await ctx.send(f"<@{ctx.author.id}> вы не указали кол-во выдаваемых листочков! :leaves:")
-    #     elif int(amount) < 1:
-    #         await channel1.send(f"<@{ctx.author.id}> укажите сумму больше **0** ")
-    #     else:
-    #         cursor.execute("UPDATE users SET cash = cash + {} WHERE id = {}".format(int(amount), member.id))
-    #         cursor.connection.commit()
     @client.slash_command()
     @commands.has_permissions(administrator=True)
     async def award(ctx, member: disnake.Member, amount):
