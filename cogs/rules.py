@@ -11,7 +11,7 @@ class Rules(commands.Cog):
         @commands.has_permissions(administrator=True)
         async def rules(self,ctx):
             emb = disnake.Embed(title="Правила Discord-сервера  Delta Squad ||",
-                                description="САВА ЛОХ:",
+                                description="ЗАПРЕЩЕНА ПУБЛИКАЦИЯ:",
                                 colour=disnake.Colour.orange())
             emb.add_field(name=" 1.1 | Рекламы сторонних ресурсов.",
                           value="Наказание: Блокировка навсегда.",
@@ -100,8 +100,8 @@ class Rules(commands.Cog):
             )
 
             emba = disnake.Embed(title="Короче!", colour=disnake.Colour.blue())
-            emba.add_field(name="САВУ ЕБЕТ НОСОРОГ", value="", inline=False)
-            emba.add_field(name="САВА ЛОХ", value="", inline=False)
+            emba.add_field(name="Кемперство -> Бан", value="", inline=False)
+            emba.add_field(name="Читы -> Бан", value="", inline=False)
             emba.add_field(name="Оскорбление -> Бан", value="")
             emba.add_field(name="Оскорбление администрации -> Расстрел, потом БАН!",
                            value="",
